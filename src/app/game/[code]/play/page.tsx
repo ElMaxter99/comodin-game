@@ -22,7 +22,7 @@ export default function Play({ params }: { params: Promise<{ code: string }> }) 
       {msg && <p role="alert" className="text-red-300">{msg}</p>}</main>);
   if (!s) return <p className="p-6">Cargando…</p>;
   const r = s.round; const myTeam = s.teams.find((t) => t.id === s.me?.team_id);
-  const colors = ['bg-red-500', 'bg-blue-500', 'bg-green-600', 'bg-amber-500'];
+  const colors = ['#ef4444', '#3b82f6', '#16a34a', '#f59e0b'];
   const J: Record<string, string> = { fifty: '50 %', double: 'x2', pass: 'Pasar' };
   return (
     <main className="mx-auto max-w-sm p-4 space-y-4">
@@ -37,7 +37,7 @@ export default function Play({ params }: { params: Promise<{ code: string }> }) 
         {r?.kind === 'question' && r.options && (<section className="space-y-2">
           <h1 className="text-xl font-bold">{r.text}</h1>
           {r.status === 'open' && left !== null && <p className="text-3xl font-black">{left}</p>}
-          {r.options.map((o, i) => (<button key={i} className={`btn w-full text-left text-white ${colors[i]}`} style={{ background: undefined }}
+          {r.options.map((o, i) => (<button key={i} className="btn w-full text-left text-white" style={{ background: colors[i], color: '#fff' }}
             disabled={r.status !== 'open' || !!r.my_answer || r.hidden?.includes(i) || !s.me?.captain}
             onClick={() => act({ type: 'answer', choice: i, key: crypto.randomUUID() })}>{'ABCD'[i]} · {r.hidden?.includes(i) ? '—' : o}{r.my_answer?.choice === i ? ' ✓ enviada' : ''}</button>))}
           {r.my_answer?.passed && <p>Habéis pasado.</p>}
