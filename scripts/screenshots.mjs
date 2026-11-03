@@ -42,18 +42,29 @@ const P2 = (d) => fetch(`${B}/api/games/${code}/play`, { method: 'POST', headers
 await P2({ type: 'team', team_id: elfos });
 await shot(p1, '06-movil-espera');
 
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 await H({ type: 'start' }); await H({ type: 'open' });
-await shot(tv, '07-tv-pregunta'); await shot(p1, '08-movil-pregunta');
-await p1.click('text=50 %'); await shot(p1, '09-movil-comodin');
-await p1.locator('button:not([disabled])', { hasText: 'España' }).click();
-await P2({ type: 'answer', choice: 0 });
-await shot(tv, '10-tv-resultado'); await shot(p1, '11-movil-acierto');
-await host.reload(); await shot(host, '12-panel-ronda');
+await shot(tv, '07-tv-reparto');                       // reparto de la ronda (4 s)
+await wait(4500);                                       // …y empiezan las cartas
+await shot(tv, '08-tv-pregunta'); await shot(p1, '09-movil-pregunta');
+await p1.click('text=Tachar dos'); await shot(p1, '10-movil-comodin');
+await p1.click('text=Usar comodín'); await p1.waitForTimeout(1500);
+await p1.locator('button.pcard', { hasText: 'España' }).click();
+await shot(p1, '11-movil-confirmar');
+await p1.click('text=Confirmar');
+await P2({ type: 'answer', choice: 0 });               // todos han respondido: se cierra y empieza el suspense (3 s)
+await p1.waitForTimeout(800);
+await shot(tv, '12-tv-suspenso');
+await wait(2600);                                       // revelación
+await shot(tv, '13-tv-revelacion'); await shot(p1, '14-movil-acierto');
+await host.reload(); await shot(host, '16-panel-ronda');
+await wait(5000);                                       // tras unos segundos, el marcador
+await shot(tv, '15-tv-marcador');
 
-await H({ type: 'open' }); await H({ type: 'close' });
-await H({ type: 'open' });
-await shot(tv, '13-tv-reto'); await host.reload(); await shot(host, '14-panel-reto');
+await H({ type: 'open' }); await wait(500); await H({ type: 'close' });
+await H({ type: 'open' }); await wait(5500);
+await shot(tv, '17-tv-reto'); await host.reload(); await shot(host, '18-panel-reto');
 await H({ type: 'validate', success: true });
 await H({ type: 'finish' });
-await shot(tv, '15-tv-podio'); await shot(p1, '16-movil-final');
+await shot(tv, '19-tv-podio'); await shot(p1, '20-movil-final');
 await browser.close(); stop();

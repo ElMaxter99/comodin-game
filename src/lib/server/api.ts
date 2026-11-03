@@ -12,7 +12,7 @@ const ERRORS: Record<string, [string, number]> = {
   no_more_items: ['No quedan preguntas ni retos.', 409], no_open_round: ['No hay ronda abierta.', 409],
   round_closed: ['La ronda ya se ha cerrado.', 409], already_answered: ['Tu equipo ya ha respondido.', 409],
   not_captain: ['Responde el capitán del equipo.', 403], joker_used: ['Ese comodín ya está usado (o ya usaste uno en esta ronda).', 409],
-  too_early: ['Todavía queda tiempo.', 409],
+  too_early: ['Todavía queda tiempo.', 409], round_not_started: ['Esperad: se están repartiendo las cartas.', 409],
 };
 
 export function fail(e: unknown) {

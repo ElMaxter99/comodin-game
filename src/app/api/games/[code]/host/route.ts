@@ -12,7 +12,8 @@ const action = z.discriminatedUnion('type', [
   z.object({ type: z.literal('challenge'), text: z.string().trim().min(1).max(300), points: z.number().int().min(0).max(10000).optional() }),
   z.object({ type: z.literal('start') }), z.object({ type: z.literal('open') }),
   z.object({ type: z.literal('close') }), z.object({ type: z.literal('finish') }),
-  z.object({ type: z.literal('time') }),
+  z.object({ type: z.literal('time') }), z.object({ type: z.literal('reveal') }),
+  z.object({ type: z.literal('pause'), on: z.boolean() }),
   z.object({ type: z.literal('validate'), success: z.boolean() }),
 ]);
 
@@ -30,6 +31,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ code: s
       case 'open': return NextResponse.json(await rpc('cg_open_round', b));
       case 'close': return NextResponse.json(await rpc('cg_close_round', { ...b, by: 'host' }));
       case 'time': return NextResponse.json(await rpc('cg_close_round', { room_code: code, by: 'time' }));
+      case 'reveal': return NextResponse.json(await rpc('cg_reveal', b));
+      case 'pause': return NextResponse.json(await rpc('cg_set_pause', { ...b, on: a.on }));
       case 'validate': return NextResponse.json(await rpc('cg_validate_challenge', { ...b, success: a.success }));
       case 'finish': return NextResponse.json(await rpc('cg_finish_game', b));
     }

@@ -14,3 +14,5 @@ Formato: **decisión** — por qué — alternativas descartadas. Estado: *provi
 10. **Temas por partida, sugeridos por fecha; primero Navidad, luego Halloween** *(provisional)*.
 11. **Marca después de que funcione** *(provisional)*.
 12. **Juego original**: sin formatos, nombres ni marcas de programas de TV.
+13. **El diseño («figma») vive en el workspace `partykit-casero`**, no en este repo. — Control de estilos y flujos desde un único sitio. Este repo solo lo referencia.
+14. **Suspense y revelación decididos en SQL**: la TV y los móviles no reciben la respuesta correcta ni los puntos hasta la revelación. — Evita que un cliente manipulado adelante el resultado.

@@ -24,6 +24,9 @@ Toda la lógica de decisión vive en funciones SQL `cg_*` (`p jsonb`, `RAISE 'ER
 4. Tipos, UI en `components/{screen,host,play}`, ruta con `handle()`, `assertSameOrigin`, `limit()`.
 5. Tests (PGlite; e2e si es de UI) y documentación.
 
+## Diseño (el «figma» está en el workspace)
+El diseño de este juego **no vive en este repo**: está en `partykit-casero/juegos/comodin-game/design/` ([DESIGN.md](https://github.com/ElMaxter99/partykit-casero/tree/main/juegos/comodin-game/design/DESIGN.md), [FLUJOS.md](https://github.com/ElMaxter99/partykit-casero/tree/main/juegos/comodin-game/design/FLUJOS.md), tokens, maquetas). Diseño primero: ningún cambio de interfaz o de flujo se programa aquí sin estar antes allí. `src/app/globals.css` porta sus tokens y componentes.
+
 ## Reglas que no se negocian
 Honestidad (no simular IA ni despliegues) · solo servicios gratuitos, sin pago automático · secretos nunca en repo/logs/chat · migraciones inmutables · cliente sin `service_role` · README y docs al día · no crear PR si no te lo piden · no desplegar sin permiso.
 
@@ -33,4 +36,4 @@ supabase/migrations/   SQL autoritativo (núcleo común + cg_* del juego)
 src/app/ (páginas y /api) · src/lib/server/ (db PGlite, api) · src/lib/live.ts (cliente) · docs/referencia/ (referencias de la plantilla)
 docs/                  README, ARQUITECTURA, REGLAS-DE-JUEGO, DECISIONES, HISTORIAL, PENDIENTE
 ```
-Estado: **reglas SQL con tests y app Next.js mínima (TV, panel, móvil) en modo de desarrollo**. Diseño completo en `partykit-casero/juegos/comodin-game.md`.
+Estado: **reglas SQL con tests y app Next.js mínima (TV, panel, móvil) en modo de desarrollo**. Diseño de partida y decisiones en `partykit-casero/juegos/comodin-game.md`.
