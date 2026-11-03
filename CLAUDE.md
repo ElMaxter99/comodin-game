@@ -33,4 +33,4 @@ supabase/migrations/   SQL autoritativo (núcleo común + cg_* del juego)
 src/lib/{client,services}/  referencias de la plantilla (use-live-game, publish)
 docs/                  README, ARQUITECTURA, REGLAS-DE-JUEGO, DECISIONES, HISTORIAL, PENDIENTE
 ```
-Estado: **esqueleto desde la plantilla, sin app Next.js todavía**. Diseño completo en `partykit-casero/juegos/comodin-game.md`.
+Estado: **reglas SQL con tests (`npm test`), sin app Next.js todavía**. Diseño completo en `partykit-casero/juegos/comodin-game.md`.
