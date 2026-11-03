@@ -3,3 +3,5 @@ node_modules
 .demo-data
 test-results
 .next
+tsconfig.tsbuildinfo
+next-env.d.ts

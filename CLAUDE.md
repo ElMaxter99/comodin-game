@@ -30,7 +30,7 @@ Honestidad (no simular IA ni despliegues) · solo servicios gratuitos, sin pago 
 ## Mapa
 ```
 supabase/migrations/   SQL autoritativo (núcleo común + cg_* del juego)
-src/lib/{client,services}/  referencias de la plantilla (use-live-game, publish)
+src/app/ (páginas y /api) · src/lib/server/ (db PGlite, api) · src/lib/live.ts (cliente) · docs/referencia/ (referencias de la plantilla)
 docs/                  README, ARQUITECTURA, REGLAS-DE-JUEGO, DECISIONES, HISTORIAL, PENDIENTE
 ```
-Estado: **reglas SQL con tests (`npm test`), sin app Next.js todavía**. Diseño completo en `partykit-casero/juegos/comodin-game.md`.
+Estado: **reglas SQL con tests y app Next.js mínima (TV, panel, móvil) en modo de desarrollo**. Diseño completo en `partykit-casero/juegos/comodin-game.md`.
