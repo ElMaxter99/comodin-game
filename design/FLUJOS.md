@@ -26,7 +26,7 @@ sequenceDiagram
     participant M as Móvil capitán
     H->>S: cg_open_round
     S-->>T: ronda abierta (sin correcta)
-    T->>T: presentación → pregunta → 4 respuestas
+    T->>T: reparto de la ronda → carta de pregunta → 4 cartas que se giran
     S-->>M: pulsadores activos
     M->>M: elegir B
     M->>S: cg_answer (tras Confirmar, idempotente)
@@ -39,7 +39,7 @@ sequenceDiagram
         H->>S: cg_close_round(host)
     end
     S-->>T: ronda revelada (correcta + resultados)
-    T->>T: suspense 3 s (o hasta «Revelar») → revelación
+    T->>T: suspense 3 s (o hasta «Revelar») → la correcta se da la vuelta
     S-->>M: ¡Correcto! +N / Esta vez no
 ```
 

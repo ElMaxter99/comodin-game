@@ -9,6 +9,8 @@ Juego de fiesta para jugar en casa: **preguntas con cuatro respuestas y retos pa
   <img src="docs/img/08-movil-pregunta.png" alt="Móvil del capitán con comodines" width="17%">
 </p>
 
+> **Diseño primero:** la interfaz se define antes en [`design/DESIGN.md`](design/DESIGN.md) (estilo «Baraja», maquetas y [flujos](design/FLUJOS.md)). Lo que ves abajo es la app actual; el rediseño aún no está implementado.
+
 ## Cómo se juega
 
 1. El presentador crea la partida, añade **equipos** y **preguntas/retos** y abre la pantalla de la TV.
