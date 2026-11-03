@@ -1,0 +1,20 @@
+/* Comodín Game · tokens del tema `base` («Gala»). Los temas de estación solo redefinen estas variables. */
+:root {
+  --stage-0: #05061a;        /* fondo del plató */
+  --stage-1: #0d1040;
+  --stage-2: #1b1466;
+  --spot: rgba(120, 140, 255, .35);
+  --gold: #ffc247;           /* acento principal, escalera, comodines */
+  --gold-2: #ff9d00;
+  --ink: #f6f4ff;
+  --ink-dim: #a9a6d6;
+  --panel: rgba(18, 16, 70, .72);
+  --panel-line: rgba(255, 194, 71, .55);
+  --ok: #2fe08a;             /* correcta */
+  --bad: #ff4d6d;            /* incorrecta */
+  --locked: #ffb020;         /* respuesta confirmada, a la espera */
+  --opt-a: #ef476f; --opt-b: #3a86ff; --opt-c: #06d6a0; --opt-d: #ffb703;
+  --radius: 18px;
+  --font-display: 'Trebuchet MS', 'Segoe UI', system-ui, sans-serif;
+  --font-body: system-ui, 'Segoe UI', Roboto, sans-serif;
+}
