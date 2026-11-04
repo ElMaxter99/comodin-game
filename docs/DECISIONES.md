@@ -15,4 +15,7 @@ Formato: **decisión** — por qué — alternativas descartadas. Estado: *provi
 11. **Marca después de que funcione** *(provisional)*.
 12. **Juego original**: sin formatos, nombres ni marcas de programas de TV.
 13. **El diseño («figma») vive en el workspace `partykit-casero`**, no en este repo. — Control de estilos y flujos desde un único sitio. Este repo solo lo referencia.
+15. **Reglas extra opcionales y apagadas** (puntos crecientes, mano segura, apuesta), elegidas por el propietario. — La partida base no cambia; todo en SQL; la apuesta no se combina con Doble/Pasar para que cada ronda tenga una sola decisión de riesgo. Las reglas se presentan con lenguaje de baraja, no de escalera.
+16. **Temas por `data-theme` y tokens**: Navidad solo redefine variables y añade adornos (nieve, bombillas); la estructura no cambia. El diseño está en `partykit-casero/.../design/temas/`.
+17. **Adaptador de Supabase por HTTP (PostgREST) sin SDK**, con la clave de servicio solo en servidor; Realtime Broadcast como aviso sin datos y sondeo de respaldo; acceso del presentador por enlace mágico (Supabase Auth). — Cero dependencias nuevas.
 14. **Suspense y revelación decididos en SQL**: la TV y los móviles no reciben la respuesta correcta ni los puntos hasta la revelación. — Evita que un cliente manipulado adelante el resultado.

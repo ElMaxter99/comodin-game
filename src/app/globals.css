@@ -11,7 +11,7 @@
 body { margin: 0; color: var(--ink); font-family: system-ui, 'Segoe UI', Roboto, sans-serif; background: var(--felt-0); }
 .felt {
   background:
-    radial-gradient(ellipse at 50% -10%, rgba(255,79,216,.28), transparent 55%),
+    radial-gradient(ellipse at 50% -10%, var(--glow-top, rgba(255,79,216,.28)), transparent 55%),
     conic-gradient(from 45deg at 50% 50%, var(--diamond) 0 25%, transparent 0 50%, var(--diamond) 0 75%, transparent 0) 0 0 / 96px 96px,
     linear-gradient(180deg, var(--felt-1), var(--felt-0));
 }
@@ -26,7 +26,7 @@ body { margin: 0; color: var(--ink); font-family: system-ui, 'Segoe UI', Roboto,
 .pips.hot i:not(.off) { background: var(--coral); box-shadow: 0 0 14px var(--coral); animation: throb .6s infinite alternate; }
 .secs { font: 900 40px var(--font-display); margin: 0 14px; min-width: 54px; text-align: center; }
 .qcard { margin: 26px 80px 0; padding: 34px 44px; text-align: center; font: 800 38px/1.2 var(--font-display); color: var(--card-ink); background: var(--card); border-radius: var(--radius); transform: rotate(-.6deg); box-shadow: 0 18px 40px rgba(0,0,0,.55), 0 0 0 6px rgba(255,255,255,.08); position: relative; animation: dealin .5s ease-out both; }
-.qcard::before, .qcard::after { content: '★'; position: absolute; font-size: 30px; color: var(--joker); }
+.qcard::before, .qcard::after { content: var(--star, '★'); position: absolute; font-size: 30px; color: var(--joker); }
 .qcard::before { left: 18px; top: 10px; } .qcard::after { right: 18px; bottom: 10px; }
 .qcard.small { margin: 0; padding: 14px 18px; font-size: 20px; }
 .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; margin: 34px 56px 0; }
@@ -40,7 +40,7 @@ body { margin: 0; color: var(--ink); font-family: system-ui, 'Segoe UI', Roboto,
 .card.dim { filter: brightness(.55); }
 .card.correct { transform: translateY(-18px) scale(1.04); box-shadow: 0 0 0 8px var(--lime), 0 0 60px var(--lime); animation: pop .6s ease-out; }
 .card.wrong { box-shadow: 0 0 0 6px var(--coral); filter: saturate(.6); }
-.card.back, .card.out { background: repeating-linear-gradient(45deg, #5b1d8c 0 10px, #43146b 10px 20px); color: transparent; box-shadow: 0 10px 20px rgba(0,0,0,.4); border: 6px solid var(--card); }
+.card.back, .card.out { background: repeating-linear-gradient(45deg, var(--back-1, #5b1d8c) 0 10px, var(--back-2, #43146b) 10px 20px); color: transparent; box-shadow: 0 10px 20px rgba(0,0,0,.4); border: 6px solid var(--card); }
 .card.back .idx, .card.out .idx, .card.back small, .card.out small { display: none; }
 .card.out { opacity: .45; }
 .hands { position: absolute; left: 56px; right: 56px; bottom: 66px; display: flex; gap: 16px; }
@@ -68,3 +68,26 @@ input.field { width: 100%; padding: 14px; border-radius: 14px; border: 0; font-s
 @keyframes pop { 0% { transform: scale(1); } 50% { transform: translateY(-18px) scale(1.12); } 100% { transform: translateY(-18px) scale(1.04); } }
 @keyframes throb { from { opacity: 1; } to { opacity: .55; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+
+/* Temas de estación: partykit-casero/juegos/comodin-game/design/temas/. Solo redefinen tokens y añaden adornos; se activan con <html data-theme>. */
+:root[data-theme="navidad"] {
+  --felt-0: #07170f; --felt-1: #123a26; --diamond: rgba(255,244,214,.05);
+  --card: #fff8ea; --card-ink: #1d2a1f; --ink: #fffaf0; --ink-dim: #b7d4be;
+  --joker: #ffc83d; --lime: #8df28b; --coral: #ff6b5b; --amber: #ffd27a;
+  --suit-a: #c62832; --suit-b: #1f5f8b; --suit-c: #d9822b; --suit-d: #2f8f4e;
+  --glow-top: rgba(255,200,61,.26); --back-1: #8c1d2b; --back-2: #6b1420; --star: '✶';
+}
+:root[data-theme="navidad"] .btn { color: #2b1d00; }
+:root[data-theme="navidad"] .tag.pts { color: #2b1d00; }
+:root[data-theme="navidad"] .pips i { width: 22px; height: 22px; border-radius: 50%; box-shadow: 0 0 10px rgba(255,200,61,.6); background: var(--joker); }
+:root[data-theme="navidad"] .pips i.off { background: rgba(255,255,255,.14); box-shadow: none; }
+:root[data-theme="navidad"] .pips.hot i:not(.off) { background: var(--coral); box-shadow: 0 0 14px var(--coral); }
+:root[data-theme="navidad"] .tag { box-shadow: 0 0 0 3px rgba(198,40,50,.85); }
+:root[data-theme="navidad"] .glow { text-shadow: 0 0 24px rgba(255,200,61,.65); }
+/* Nieve decorativa (no recibe toques ni cambia el diseño). */
+:root[data-theme="navidad"] body::after {
+  content: ''; position: fixed; inset: 0; pointer-events: none; opacity: .55; z-index: 50;
+  background-image: radial-gradient(3px 3px at 20px 30px, #fff 50%, transparent 52%), radial-gradient(2px 2px at 90px 120px, #fff 50%, transparent 52%),
+    radial-gradient(3px 3px at 160px 60px, #fff 50%, transparent 52%), radial-gradient(2px 2px at 230px 170px, #fff 50%, transparent 52%);
+  background-size: 260px 200px; animation: nieve 14s linear infinite; }
+@keyframes nieve { to { background-position: 0 200px; } }
