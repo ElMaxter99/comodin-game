@@ -1,6 +1,6 @@
 'use client';
 import { use, useEffect, useState } from 'react';
-import { send, useGame, useServerNow } from '@/lib/live';
+import { send, useGame, useServerNow, useTheme } from '@/lib/live';
 
 const SUIT = ['♥', '♠', '♦', '♣'];
 const JOKERS: Record<string, { label: string; text: string }> = {
@@ -18,11 +18,13 @@ export default function Play({ params }: { params: Promise<{ code: string }> }) 
   const [msg, setMsg] = useState('');
   const [pick, setPick] = useState<number | null>(null);
   const [sheet, setSheet] = useState<string | null>(null);
+  const [betSheet, setBetSheet] = useState(false);
   useEffect(() => { try { setToken(localStorage.getItem(key)); } catch {} setReady(true); }, [key]);
   const { state: s, error, refresh } = useGame(code, 'player', token);
   const now = useServerNow(s);
+  useTheme(s?.theme);
   const r = s?.round;
-  useEffect(() => { setPick(null); setSheet(null); }, [r?.id]);
+  useEffect(() => { setPick(null); setSheet(null); setBetSheet(false); }, [r?.id]);
   const act = async (b: object) => { try { setMsg(''); await send(`/api/games/${code}/play`, b, token); await refresh(); return true; } catch (e) { setMsg((e as Error).message); return false; } };
   if (!ready) return null;
   const wrap = (c: React.ReactNode) => <div className="felt phone">{c}</div>;
@@ -66,7 +68,8 @@ export default function Play({ params }: { params: Promise<{ code: string }> }) 
     return wrap(<>{top}<div className="center" style={{ paddingTop: 190 }}>
       <p style={{ font: '900 56px var(--font-display)', color: ok ? 'var(--lime)' : 'var(--coral)' }}>{ok ? '¡Correcto!' : m?.passed ? 'Pasasteis' : 'Esta vez no'}</p>
       {ok && <p className="glow" style={{ font: '900 60px var(--font-display)', marginTop: 10 }}>+{m!.points}</p>}
-      <p style={{ marginTop: 30, color: 'var(--ink-dim)' }}>{myTeam.name} · {myTeam.score} pts</p></div></>);
+      {(() => { const d = r.bets?.find((b) => b.team_id === myTeam.id)?.delta; return d ? <p style={{ marginTop: 14, color: 'var(--coral)', fontSize: 22 }}>♥ Apuesta perdida {d}</p> : null; })()}
+      <p style={{ marginTop: 30, color: 'var(--ink-dim)' }}>{myTeam.name} · {myTeam.score} pts{s.safe_every ? ` · ▣ segura ${myTeam.safe ?? 0}` : ''}</p></div></>);
   }
 
   const answered = !!mine; const locked = r.phase !== 'open';
@@ -88,10 +91,19 @@ export default function Play({ params }: { params: Promise<{ code: string }> }) 
       <button className="btn" style={{ marginTop: 18 }} disabled={pick === null} onClick={async () => { if (pick !== null && await act({ type: 'answer', choice: pick, key: crypto.randomUUID() })) setPick(null); }}>
         {pick === null ? 'Elige una carta' : `Confirmar ${'ABCD'[pick]} · ${options[pick]}`}</button>
       <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>{Object.entries(JOKERS).map(([k, j]) => (
-        <button key={k} className="joker" disabled={!s.jokers?.[k] || (k === 'fifty' && options.length < 4)} onClick={() => setSheet(k)}>{j.label}</button>))}</div></>)}
+        <button key={k} className="joker" disabled={!s.jokers?.[k] || (k === 'fifty' && options.length < 4)} onClick={() => setSheet(k)}>{j.label}</button>))}</div>
+      {s.bet?.enabled && <button className="btn" style={{ marginTop: 12, background: 'var(--coral)' }} disabled={!s.bet.available || s.bet.placed_now} onClick={() => setBetSheet(true)}>{s.bet.placed_now ? '♥ Carta apostada' : s.bet.available ? '♥ Apostar la carta' : '♥ Apuesta ya usada'}</button>}</>)}
+    {answered && r.phase === 'open' && s.bet?.placed_now && <p style={{ textAlign: 'center', marginTop: 8, color: 'var(--coral)' }}>♥ Habéis apostado</p>}
     {(answered || locked) && <p className="glow" style={{ font: '900 24px var(--font-display)', textAlign: 'center', marginTop: 22 }}>{answered ? 'Carta jugada' : 'Tiempo'}</p>}
     {(answered || locked) && <p style={{ textAlign: 'center', marginTop: 6, color: 'var(--ink-dim)' }}>Mirad la tele… {r.answered} de {r.active_teams} equipos listos</p>}
     {msg && <p role="alert" style={{ color: 'var(--coral)', marginTop: 12 }}>{msg}</p>}
+    {betSheet && (<div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,.6)', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', padding: 12 }}>
+      <div className="card" style={{ height: 'auto', width: '100%', maxWidth: 436, padding: 24, flexDirection: 'column', alignItems: 'stretch', textAlign: 'left' }}>
+        <p style={{ font: '900 24px var(--font-display)', color: 'var(--coral)' }}>♥ Apostar la carta</p>
+        <p style={{ margin: '10px 0 6px', font: '500 16px sans-serif', color: '#5b4a7a' }}>Si acertáis, ganáis <b>el doble</b> ({r.points * 2}). Si falláis, perdéis <b>{r.points}</b>{s.safe_every ? <> (nunca bajáis de vuestra mano segura: {myTeam.safe ?? 0})</> : null}.</p>
+        <p style={{ margin: '0 0 18px', font: '700 14px sans-serif', color: '#5b4a7a' }}>Una vez por equipo y partida. Antes de confirmar.</p>
+        <button className="btn" style={{ background: 'var(--coral)' }} onClick={async () => { await act({ type: 'bet' }); setBetSheet(false); }}>Apostar</button>
+        <button className="btn ghost" style={{ marginTop: 10, color: 'var(--card-ink)', background: '#eadff7' }} onClick={() => setBetSheet(false)}>Cancelar</button></div></div>)}
     {sheet && (<div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,.6)', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', padding: 12 }}>
       <div className="card" style={{ height: 'auto', width: '100%', maxWidth: 436, padding: 24, flexDirection: 'column', alignItems: 'stretch', textAlign: 'left' }}>
         <p style={{ font: '900 24px var(--font-display)', color: 'var(--joker)' }}>★ {JOKERS[sheet].label}</p>

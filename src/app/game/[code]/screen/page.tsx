@@ -1,7 +1,7 @@
 'use client';
 import { use, useEffect, useRef, useState } from 'react';
 import QRCode from 'qrcode';
-import { send, useGame, useServerNow, type Round, type State } from '@/lib/live';
+import { send, useGame, useServerNow, useTheme, type Round, type State } from '@/lib/live';
 import { Stage } from '@/components/Stage';
 import { enableSound, sfx, soundEnabled } from '@/lib/audio';
 
@@ -12,6 +12,7 @@ export default function Screen({ params }: { params: Promise<{ code: string }> }
   const { code } = use(params);
   const { state: s, error, refresh } = useGame(code, 'public');
   const now = useServerNow(s);
+  useTheme(s?.theme);
   const [qr, setQr] = useState('');
   const [snd, setSnd] = useState(false);
   useEffect(() => { QRCode.toDataURL(`${location.origin}/game/${code}/play`, { margin: 1, width: 240 }).then(setQr); }, [code]);
@@ -133,7 +134,7 @@ function RoundView({ s, r, now, left, team }: { s: State; r: Round; now: number;
       {r.phase === 'revealed' && <p className="glow" style={{ font: '900 44px var(--font-display)', marginTop: 24 }}>{(r.results?.[0]?.points ?? 0) > 0 ? `¡Conseguido! +${r.points}` : 'Esta vez no'}</p>}</div>)}
     {r.kind === 'question' && <div className="hands">{s.teams.map((t) => (
       <div key={t.id} className={`hand ${r.answered_teams.includes(t.id) ? 'done' : ''}`} style={{ ['--c' as string]: t.color }}>
-        <span>{t.name}{r.phase === 'open' && !r.answered_teams.includes(t.id) ? ' …' : ''}</span><span>{t.score}</span></div>))}</div>}
+        <span>{t.name}{r.phase === 'open' && !r.answered_teams.includes(t.id) ? ' …' : ''}{r.bets?.some((b) => b.team_id === t.id) ? ' ♥' : ''}</span><span>{t.score}</span></div>))}</div>}
     <div className="host-line"><span className="tag">Presentador</span>
       {r.phase === 'open' && r.kind === 'question' && `${r.answered} de ${r.active_teams} equipos han confirmado`}
       {r.phase === 'open' && r.kind === 'challenge' && 'El presentador decide si lo han conseguido'}
@@ -150,7 +151,8 @@ function Scoreboard({ s }: { s: State }) {
         <div key={t.id} className="card flip" style={{ height: 320, width: 270, flexDirection: 'column', borderBottom: `16px solid ${t.color}`, transform: `translateY(${[-10, 20, 30, 40][i]}px) rotate(${[0, -2, 2, -1][i]}deg)` }}>
           <div className="idx" style={{ ['--s' as string]: t.color }}>{i + 1}º</div>
           <div style={{ font: '800 30px var(--font-display)' }}>{t.name}</div>
-          <div style={{ font: '900 64px var(--font-display)', color: 'var(--joker)' }}>{t.score}</div></div>))}
+          <div style={{ font: '900 64px var(--font-display)', color: 'var(--joker)' }}>{t.score}</div>
+          {!!s.safe_every && <div style={{ font: '800 18px var(--font-display)', color: '#1b7a4a' }}>▣ segura {t.safe ?? 0}</div>}</div>))}
     </div>
     <div className="host-line"><span className="tag">Presentador</span>Entre rondas · «Lanzar siguiente»</div>
   </>);

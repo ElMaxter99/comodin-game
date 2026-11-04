@@ -1,12 +1,13 @@
 'use client';
 import { use, useState } from 'react';
-import { send, useGame } from '@/lib/live';
+import { send, useGame, useTheme } from '@/lib/live';
 
 const COLORS = ['#e63946', '#1b9e77', '#6c63ff', '#f08a24', '#ff4fd8', '#3d3a8f'];
 
 export default function Host({ params }: { params: Promise<{ code: string }> }) {
   const { code } = use(params);
   const { state: s, error, refresh } = useGame(code, 'host');
+  useTheme(s?.theme);
   const [msg, setMsg] = useState('');
   const [team, setTeam] = useState('');
   const [text, setText] = useState('');
@@ -48,6 +49,8 @@ export default function Host({ params }: { params: Promise<{ code: string }> }) 
         {r.kind === 'question' && r.options && s.items && <p style={{ color: 'var(--lime)' }}>Correcta: {'ABCD'[s.items.find((i) => i.text === r.text)?.correct ?? 0]} · {r.options[s.items.find((i) => i.text === r.text)?.correct ?? 0]}</p>}
         {r.phase === 'open' && r.kind === 'question' && <p style={{ color: 'var(--ink-dim)' }}>{r.answered} de {r.active_teams} equipos han confirmado</p>}
         {r.phase === 'suspense' && <p style={{ color: 'var(--amber)' }}>{r.hold ? 'En pausa dramática: la TV espera a que pulses «Revelar».' : 'Suspense en la TV…'}</p>}</>}
+      {r?.bets && r.bets.length > 0 && <p style={{ color: 'var(--coral)' }}>♥ Han apostado: {r.bets.map((b) => s.teams.find((t) => t.id === b.team_id)?.name).join(', ')}</p>}
+      {!!s.growing_step && nextItem && (!r || r.phase !== 'open') && <p style={{ color: 'var(--ink-dim)' }}>↗ La próxima vale {nextItem.points + s.rounds_played * s.growing_step} pts</p>}
       <p style={{ color: 'var(--ink-dim)', fontSize: 15 }}>Guion: {guion}</p>
       {r?.phase === 'open' && r.kind === 'question' && <button className="btn" onClick={() => act({ type: 'close' })}>Cerrar ya</button>}
       {r?.phase === 'open' && r.kind === 'challenge' && <div style={{ display: 'flex', gap: 10 }}>
@@ -58,6 +61,6 @@ export default function Host({ params }: { params: Promise<{ code: string }> }) 
       <label style={{ display: 'flex', gap: 8, alignItems: 'center' }}><input type="checkbox" checked={!!s.dramatic_pause} onChange={(e) => act({ type: 'pause', on: e.target.checked })} /> Pausa dramática (yo decido cuándo revelar)</label>
       <button style={{ textDecoration: 'underline', justifySelf: 'start' }} onClick={() => act({ type: 'finish' })}>Terminar y ver podio</button>
     </section>)}
-    <section className="panel" style={{ marginTop: 14 }}><h2 style={{ fontWeight: 800 }}>Marcador</h2><ol>{s.teams.map((t) => <li key={t.id} style={{ color: t.color, fontWeight: 700 }}>{t.name}: {t.score}</li>)}</ol></section>
+    <section className="panel" style={{ marginTop: 14 }}><h2 style={{ fontWeight: 800 }}>Marcador</h2><ol>{s.teams.map((t) => <li key={t.id} style={{ color: t.color, fontWeight: 700 }}>{t.name}: {t.score}{s.safe_every ? ` · ▣ ${t.safe ?? 0}` : ''}</li>)}</ol></section>
   </>);
 }
