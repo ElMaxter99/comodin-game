@@ -10,21 +10,21 @@ export default function Home() {
     try { const r = await send('/api/games', { name }); location.href = `/game/${r.room_code}/host`; } catch (e) { setErr((e as Error).message); }
   };
   return (
-    <main className="mx-auto max-w-md p-4 space-y-6">
-      <h1 className="text-4xl font-black">🃏 Comodín Game</h1>
+    <div className="felt" style={{ minHeight: '100dvh' }}><main className="mx-auto max-w-md p-4 space-y-6" style={{ paddingTop: 48 }}>
+      <h1 className="glow" style={{ font: '900 44px var(--font-display)' }}>🃏 Comodín Game</h1>
       <p>Preguntas y retos por equipos: la tele muestra el juego y los móviles son los mandos.</p>
-      <section className="card space-y-3">
+      <section className="panel space-y-3">
         <h2 className="font-bold">Soy el presentador</h2>
-        <input className="w-full" value={name} onChange={(e) => setName(e.target.value)} aria-label="Nombre de la partida" />
-        <button className="btn w-full" onClick={create}>Crear partida</button>
+        <input className="field" value={name} onChange={(e) => setName(e.target.value)} aria-label="Nombre de la partida" />
+        <button className="btn" onClick={create}>Crear partida</button>
       </section>
-      <section className="card space-y-3">
+      <section className="panel space-y-3">
         <h2 className="font-bold">Quiero jugar</h2>
-        <input className="w-full uppercase" placeholder="Código" value={code} onChange={(e) => setCode(e.target.value.toUpperCase())} aria-label="Código de sala" />
-        <button className="btn w-full" disabled={code.length < 4} onClick={() => (location.href = `/game/${code}/play`)}>Entrar</button>
+        <input className="field uppercase" placeholder="Código" value={code} onChange={(e) => setCode(e.target.value.toUpperCase())} aria-label="Código de sala" />
+        <button className="btn" disabled={code.length < 4} onClick={() => (location.href = `/game/${code}/play`)}>Entrar</button>
       </section>
-      {err && <p role="alert" className="text-red-300">{err}</p>}
+      {err && <p role="alert" style={{ color: 'var(--coral)' }}>{err}</p>}
       <p className="text-sm opacity-70">Modo de desarrollo: datos solo en memoria, sin IA.</p>
-    </main>
+    </main></div>
   );
 }
