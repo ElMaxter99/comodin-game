@@ -22,6 +22,11 @@ La opción correcta hasta `reveal` (se vacía en SQL), la respuesta de cada equi
 ## Puntuación (enteros)
 Acierto = puntos base (× rapidez si está activa, apagada por defecto) (× 2 con comodín doble). Reto = puntos fijos al validarse. Empates comparten puesto.
 
+## Reglas extra (opcionales, apagadas por defecto)
+- **Puntos crecientes:** la ronda `n` vale `base + (n−1)·paso` (también los retos).
+- **Mano segura:** cada `N` rondas cada equipo guarda su marcador; una apuesta perdida no baja de ahí.
+- **Apuesta:** una vez por equipo y partida, antes de responder, solo en preguntas: acierto ×2; fallo o sin responder −puntos de la ronda (suelo: mano segura o 0). No se combina con Doble ni Pasar en la misma ronda. La apuesta no se ve en la TV hasta la revelación.
+
 ## Comodines
 50 %, doble puntuación y pasar pregunta: uno de cada por equipo y partida.
 

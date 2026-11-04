@@ -67,4 +67,36 @@ await shot(tv, '17-tv-reto'); await host.reload(); await shot(host, '18-panel-re
 await H({ type: 'validate', success: true });
 await H({ type: 'finish' });
 await shot(tv, '19-tv-podio'); await shot(p1, '20-movil-final');
+
+// ---- Tema Navidad y reglas extra (apuesta, mano segura, puntos crecientes)
+await host.goto('/');
+await host.getByRole('radio', { name: /Navidad/ }).click();
+for (const n of [/Puntos crecientes/, /Mano segura/, /Apuesta/]) await host.getByRole('checkbox', { name: n }).click();
+await shot(host, '21-inicio-navidad');
+const { room_code: c2 } = await post('/api/games', { name: 'Nochebuena en casa', theme: 'navidad', growing_step: 100, safe_every: 2, bets_enabled: true });
+const H2 = (d) => post(`/api/games/${c2}/host`, d);
+await H2({ type: 'team', name: 'Los Renos', color: '#c62832' });
+await H2({ type: 'team', name: 'Los Elfos', color: '#2f8f4e' });
+for (const [t, o] of [['¿Cuántos renos tiran del trineo, sin contar a Rodolfo?', ['Cuatro', 'Ocho', 'Nueve', 'Doce']], ['¿De qué color es el gorro de Papá Noel?', ['Rojo', 'Azul', 'Verde', 'Negro']]]) {
+  await H2({ type: 'question', text: t, options: o, correct: t.includes('renos') ? 1 : 0, points: 100 });
+}
+const tv2 = await (await browser.newContext({ viewport: TV, deviceScaleFactor: 2, baseURL: B })).newPage();
+const pn = await (await browser.newContext({ viewport: PHONE, deviceScaleFactor: 2, baseURL: B })).newPage();
+await tv2.goto(`/game/${c2}/screen`);
+await pn.goto(`/game/${c2}/play`); await pn.fill('input', 'Ana'); await pn.click('text=Entrar'); await pn.click('text=Los Renos');
+const jn = await (await fetch(`${B}/api/games/${c2}/join`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ name: 'Luis' }) })).json();
+const st2 = await (await fetch(`${B}/api/games/${c2}/state`)).json();
+const PN2 = (d) => fetch(`${B}/api/games/${c2}/play`, { method: 'POST', headers: { 'content-type': 'application/json', 'x-player-token': jn.token }, body: JSON.stringify(d) });
+await PN2({ type: 'team', team_id: st2.teams.find((t) => t.name === 'Los Elfos').id });
+await H2({ type: 'start' }); await H2({ type: 'open' }); await wait(4600);
+await shot(tv2, '22-tv-navidad-pregunta');
+await pn.locator('button.pcard', { hasText: 'Ocho' }).click();
+await pn.getByRole('button', { name: '♥ Apostar la carta' }).click(); await shot(pn, '23-movil-apuesta');
+await pn.getByRole('button', { name: 'Apostar', exact: true }).click(); await pn.waitForTimeout(1200);
+await pn.click('text=Confirmar'); await PN2({ type: 'answer', choice: 0 });
+await wait(3600); await shot(tv2, '24-tv-navidad-revelacion');
+await wait(5000);
+await H2({ type: 'open' }); await wait(4600);
+await pn.locator('button.pcard', { hasText: 'Rojo' }).click(); await pn.click('text=Confirmar'); await PN2({ type: 'answer', choice: 1 });
+await wait(9500); await shot(tv2, '25-tv-navidad-marcador');
 await browser.close(); stop();
