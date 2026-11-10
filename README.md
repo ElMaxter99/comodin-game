@@ -2,7 +2,7 @@
 
 Juego de fiesta para jugar en casa: **preguntas con cuatro respuestas y retos para equipos**. La **TV** muestra la ronda como una mesa de cartas, los **móviles** son la mano de cada equipo y un **presentador** (Game Master) lo dirige desde su panel. Con **comodines** (tachar dos, doble y pasar) **reglas extra opcionales** (puntos crecientes, mano segura, apuesta) y **temas por estación** (Base y Navidad; Halloween después) sobre el estilo «Baraja». Juego original: no usa formatos ni marcas de programas de TV.
 
-> **Estado: jugable en modo de desarrollo y lista para Supabase.** Reglas en SQL con tests, app Next.js con TV, panel y móvil, adaptador de Supabase (Postgres, enlace mágico del presentador y Realtime) y pruebas e2e. **No desplegado ni probado contra Supabase real** (ver [`docs/INFRA.md`](docs/INFRA.md)). Sin IA. Lo no verificado está al final.
+> **Estado: aparcado (2026-11-10), jugable en modo de desarrollo y lista para Supabase.** Para retomarlo y desplegar: [`docs/SIGUIENTES-PASOS.md`](docs/SIGUIENTES-PASOS.md). Reglas en SQL con tests, app Next.js con TV, panel y móvil, adaptador de Supabase (Postgres, enlace mágico del presentador y Realtime) y pruebas e2e. **No desplegado ni probado contra Supabase real** (ver [`docs/INFRA.md`](docs/INFRA.md)). Sin IA. Lo no verificado está al final.
 
 <p align="center">
   <img src="docs/img/13-tv-revelacion.png" alt="TV: la carta correcta se da la vuelta" width="62%">
