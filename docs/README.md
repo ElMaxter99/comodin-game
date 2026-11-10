@@ -7,6 +7,7 @@
 | [INFRA.md](INFRA.md) | Supabase, variables, acceso del presentador y Realtime |
 | [DECISIONES.md](DECISIONES.md) | Qué, por qué, alternativas descartadas |
 | [HISTORIAL.md](HISTORIAL.md) | Cronología de peticiones del propietario y lo entregado |
+| [SIGUIENTES-PASOS.md](SIGUIENTES-PASOS.md) | Lista ordenada para desplegar y configurar (proyecto aparcado) |
 | [PENDIENTE.md](PENDIENTE.md) | Tareas del propietario y lo no verificado |
 
 Arquitectura común: workspace `partykit-casero`.
